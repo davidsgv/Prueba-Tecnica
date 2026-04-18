@@ -1,0 +1,60 @@
+@PaqueteId = 1b2955cb-6614-4c4a-b41d-cebe6e7d6944
+@RepartidorId = 9c68537e-c4c8-418a-ac5e-627e92e3de49
+
+### Obtener todos los paquetes
+GET {{HostAddress}}/api/paquetes
+Accept: application/json
+
+###
+
+### Obtener lista de paquetes (Paginado y Filtrado)
+GET {{HostAddress}}/api/paquetes?PageNumber=1&PageSize=10&EstadoPaquete=0
+Accept: application/json
+
+###
+
+### Obtener un paquete por ID
+GET {{HostAddress}}/api/paquetes/{{PaqueteId}}
+Accept: application/json
+
+###
+
+### Crear un nuevo paquete
+POST {{HostAddress}}/api/paquetes
+Content-Type: application/json
+
+{
+  "descripcion": "Paquete de prueba con una descripción larga",
+  "peso": 2.5,
+  "codigo": "PKG-{{$randomInt}}",
+  "estado": 0,
+  "prioridad": 1
+}
+
+###
+
+### Actualizar un paquete existente
+PUT {{HostAddress}}/api/paquetes/{{PaqueteId}}
+Content-Type: application/json
+
+{
+  "descripcion": "Descripción actualizada",
+  "peso": 3.0,
+  "estado": 1,
+  "prioridad": 2
+}
+
+###
+
+### Asignar un repartidor al paquete (Nuevo Endpoint)
+PUT {{HostAddress}}/api/paquetes/{{PaqueteId}}/repartidor
+Content-Type: application/json
+
+{
+  "repartidorId": "{{RepartidorId}}"
+}
+
+###
+
+### Eliminar un paquete
+DELETE {{HostAddress}}/api/paquetes/{{PaqueteId}}

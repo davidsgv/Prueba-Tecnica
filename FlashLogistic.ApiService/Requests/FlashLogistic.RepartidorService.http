@@ -1,0 +1,36 @@
+@RepartidorId = 2d414cbc-2f90-4cfa-9fa8-c1a424743f60
+
+### Obtener lista de repartidores (Paginado)
+GET {{HostAddress}}/api/repartidores?PageNumber=1&PageSize=10
+Accept: application/json
+
+###
+
+### Obtener un repartidor por ID
+GET {{HostAddress}}/api/repartidores/{{RepartidorId}}
+Accept: application/json
+
+###
+
+### Crear un nuevo repartidor
+POST {{HostAddress}}/api/repartidores
+Content-Type: application/json
+
+{
+  "nombre": "David Logistics"
+}
+
+###
+
+### Actualizar un repartidor existente
+PUT {{HostAddress}}/api/repartidores/{{RepartidorId}}
+Content-Type: application/json
+
+{
+  "nombre": "David Logistics Editado"
+}
+
+###
+
+### Eliminar un repartidor
+DELETE {{HostAddress}}/api/repartidores/{{RepartidorId}}
