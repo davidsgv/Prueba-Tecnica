@@ -6,7 +6,11 @@
       "type": "dotnet",
       "request": "launch",
       "projectPath": "${workspaceFolder}/backend/FlashLogistic.AppHost/FlashLogistic.AppHost.csproj",
-      
+      "presentation": {
+        "hidden": false,
+        "group": "",
+        "order": 1
+      }
     }
   ]
 }

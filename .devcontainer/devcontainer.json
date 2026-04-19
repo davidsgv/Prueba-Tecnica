@@ -11,7 +11,8 @@
   "customizations": {
     "vscode": {
       "extensions": [
-        "humao.rest-client"
+        "humao.rest-client",
+        "ms-dotnettools.csdevkit"
       ]
     }
   }

@@ -1,8 +1,8 @@
 var builder = DistributedApplication.CreateBuilder(args);
 
-var sql = builder.AddSqlServer("sqlserver")
-    .WithDataVolume("FlashLogisticsSQL")
-    .WithLifetime(ContainerLifetime.Persistent);
+var sql = builder.AddSqlServer("sqlserver");
+    // .WithDataVolume("FlashLogisticsSQL")
+    // .WithLifetime(ContainerLifetime.Persistent);
 
 var db = sql.AddDatabase("sqldata");
 
