@@ -2,17 +2,16 @@
   "name": "Dotnet Aspire & Angular",
   "image": "mcr.microsoft.com/devcontainers/universal:latest", 
   "features": {
-    // "ghcr.io/devcontainers/features/docker-in-docker:1": {},
     "ghcr.io/devcontainers/features/dotnet:2":{
-      
     }
   },
-  "postCreateCommand": "dotnet workload install aspire",
+  "postCreateCommand": "dotnet workload install aspire && npm install -g @angular/cli",
   "customizations": {
     "vscode": {
       "extensions": [
         "humao.rest-client",
-        "ms-dotnettools.csdevkit"
+        "ms-dotnettools.csdevkit",
+        "Angular.ng-template"
       ]
     }
   }
