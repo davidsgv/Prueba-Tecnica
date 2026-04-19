@@ -1,80 +1,9 @@
-<main class="pt-20 pb-24 md:pl-72 px-4 md:px-8 max-w-[1600px] mx-auto min-h-screen flex flex-col gap-6">
+<div class="p-5 md:p-10 grid grid-cols-1 md:grid-cols-3 gap-6 items-start">
+	<div class="md:col-span-1">
+		<app-package-form></app-package-form>
+	</div>
 
-  @if (mensajeError()) {
-    <div class="bg-error-container/20 border border-error/30 rounded-lg p-4 flex items-start gap-3 animate-in fade-in slide-in-from-top-2 duration-300">
-      <span class="material-symbols-outlined text-error">error</span>
-      <div>
-        <h3 class="text-error font-semibold text-sm">Action Blocked</h3>
-        <p class="text-on-error-container text-sm mt-1">{{ mensajeError() }}</p>
-      </div>
-    </div>
-  }
-
-  <div class="grid grid-cols-1 xl:grid-cols-12 gap-6 items-start">
-    
-    <div class="xl:col-span-4 bg-surface-container rounded-xl border border-outline-variant p-6 shadow-sm flex flex-col gap-6 h-fit">
-      <h2 class="text-lg font-bold text-on-surface">Register Package</h2>
-      <form class="space-y-5">
-        <input class="w-full bg-surface-container-lowest border border-outline-variant rounded-lg py-2.5 px-3 text-sm text-on-surface" placeholder="Tracking Code">
-        <input class="w-full bg-surface-container-lowest border border-outline-variant rounded-lg py-2.5 px-3 text-sm text-on-surface" placeholder="Description">
-        <button class="w-full bg-primary text-on-primary font-bold py-3 rounded-lg hover:opacity-90 transition-all">Log Package</button>
-      </form>
-    </div>
-
-    <div class="xl:col-span-8 flex flex-col gap-4">
-      
-      <div class="flex gap-2 p-1 bg-surface-container rounded-lg border border-outline-variant overflow-x-auto">
-        @for (estado of ['Todos', 'En Bodega', 'Asignado', 'Entregado']; track estado) {
-          <button (click)="filtroEstado.set(estado)"
-                  [class.bg-primary/10]="filtroEstado() === estado"
-                  [class.text-primary]="filtroEstado() === estado"
-                  class="px-4 py-1.5 rounded-md text-sm font-medium transition-colors">
-            {{ estado }}
-          </button>
-        }
-      </div>
-
-      <div class="space-y-3">
-        @for (paquete of paquetesFiltrados(); track paquete.id) {
-          <div class="bg-surface-container rounded-lg border p-4 flex flex-col sm:flex-row gap-4 justify-between items-center"
-               [class.border-primary/50]="paquete.prioridad === 'Alta'"
-               [class.border-outline-variant]="paquete.prioridad !== 'Alta'">
-            
-            <div class="flex flex-col gap-1">
-              <div class="flex items-center gap-2">
-                <span class="font-mono text-sm font-bold">{{ paquete.codigo }}</span>
-                @if (paquete.prioridad === 'Alta') {
-                  <span class="text-[10px] uppercase font-bold px-2 py-0.5 rounded-full bg-primary/20 text-primary">Alta</span>
-                }
-              </div>
-              <span class="text-sm text-on-surface-variant">{{ paquete.descripcion }}</span>
-            </div>
-
-            <div class="flex items-center gap-3">
-              @if (paquete.estado === 'En Bodega') {
-                <select #repSelect class="bg-surface-container-lowest border border-outline-variant rounded-md px-2 py-1 text-sm text-on-surface">
-                  <option value="">Seleccionar Repartidor</option>
-                  @for (r of repartidores(); track r.id) {
-                    <option [value]="r.id" [disabled]="r.paquetesAsignados >= 3">
-                      {{ r.nombre }} {{ r.paquetesAsignados >= 3 ? '(Lleno)' : '' }}
-                    </option>
-                  }
-                </select>
-                <button (click)="asignarRepartidor(paquete.id, repSelect.value)"
-                        class="bg-primary/10 text-primary border border-primary/30 px-3 py-1.5 rounded-md text-sm hover:bg-primary hover:text-on-primary transition-all">
-                  Assign
-                </button>
-              } @else {
-                <div class="flex items-center gap-2 text-tertiary">
-                  <span class="material-symbols-outlined">local_shipping</span>
-                  <span class="text-sm font-medium">{{ paquete.estado }} ({{ paquete.repartidor }})</span>
-                </div>
-              }
-            </div>
-          </div>
-        }
-      </div>
-
-    </div>
-  </div>
-</main>
+	<div class="md:col-span-2">
+		<app-package-list></app-package-list>
+	</div>
+</div>

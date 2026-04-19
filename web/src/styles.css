@@ -60,3 +60,17 @@
     --font-body: "Geist", "sans-serif";
     --font-label: "Geist", "sans-serif";
 }
+
+@layer base {
+  :root {
+    /* Aseguramos que el esquema de color sea oscuro para scrollbars y sistema */
+    color-scheme: dark;
+  }
+
+  html, body {
+    @apply bg-background text-on-background;
+    font-family: var(--font-body);
+    margin: 0;
+    height: 100%;
+  }
+}

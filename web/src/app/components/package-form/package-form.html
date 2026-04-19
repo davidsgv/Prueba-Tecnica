@@ -1,0 +1,87 @@
+<div class="bg-surface-container rounded-lg border border-outline-variant p-6 shadow-sm sticky top-6">
+    <div class="flex items-center gap-2 mb-6 border-b border-outline-variant pb-4">
+        <svg lucidePackage class="w-6 h-6 text-primary" [strokeWidth]="2"></svg>
+        <h3 class="font-headline font-bold text-lg">Registrar Paquete</h3>
+    </div>
+
+    @if (serverError()) {
+        <div class="mb-4 bg-error-container/20 border border-error/40 rounded-lg p-3 flex items-start gap-2 text-error text-xs animate-in fade-in slide-in-from-top-2">
+            <span class="material-symbols-outlined text-sm shrink-0">report</span>
+            <span>{{ serverError() }}</span>
+        </div>
+    }
+
+    <form [formGroup]="packageForm" (ngSubmit)="onSubmit()" class="space-y-5">
+        <div>
+            <label class="block text-sm font-medium text-on-surface-variant mb-1">Tracking Code</label>
+            <input formControlName="codigo" type="text"
+                [class.border-error]="isInvalid('codigo')"
+                class="w-full bg-surface-container-lowest border border-outline-variant rounded p-2.5 text-on-surface focus:ring-2 focus:ring-primary focus:border-transparent outline-none transition-all placeholder:text-surface-variant text-sm font-mono uppercase"
+                placeholder="Ej: FL-2026-XYZ9" />
+            
+            @if (isInvalid('codigo')) {
+                <p class="text-[10px] text-error mt-1 ml-1">
+                    @if (packageForm.get('codigo')?.errors?.['required']) { El código es obligatorio. }
+                    @if (packageForm.get('codigo')?.errors?.['maxlength']) { Máximo 20 caracteres. }
+                    @if (packageForm.get('codigo')?.errors?.['pattern']) { Formato inválido (solo letras, números y guiones). }
+                </p>
+            }
+        </div>
+
+        <div>
+            <label class="block text-sm font-medium text-on-surface-variant mb-1">Description</label>
+            <textarea formControlName="descripcion" rows="3"
+                [class.border-error]="isInvalid('descripcion')"
+                class="w-full bg-surface-container-lowest border border-outline-variant rounded p-2.5 text-on-surface focus:ring-2 focus:ring-primary focus:border-transparent outline-none transition-all placeholder:text-surface-variant text-sm resize-none"
+                placeholder="Mínimo 20 caracteres..."></textarea>
+            
+            @if (isInvalid('descripcion')) {
+                <p class="text-[10px] text-error mt-1 ml-1">
+                    La descripción debe tener entre 20 y 300 caracteres. 
+                    ({{ packageForm.get('descripcion')?.value?.length || 0 }}/300)
+                </p>
+            }
+        </div>
+
+        <div>
+            <label class="block text-sm font-medium text-on-surface-variant mb-1">Weight (KG)</label>
+            <div class="relative">
+                <input formControlName="peso" type="number" step="0.1"
+                    [class.border-error]="isInvalid('peso')"
+                    class="w-full bg-surface-container-lowest border border-outline-variant rounded p-2.5 text-on-surface focus:ring-2 focus:ring-primary focus:border-transparent outline-none transition-all placeholder:text-surface-variant text-sm pr-10"
+                    placeholder="0.0" />
+                <span class="absolute right-3 top-2.5 text-on-surface-variant text-sm font-medium">KG</span>
+            </div>
+            @if (isInvalid('peso')) {
+                <p class="text-[10px] text-error mt-1 ml-1">El peso debe ser mayor a 0.</p>
+            }
+        </div>
+
+        <div>
+            <label class="block text-sm font-medium text-on-surface-variant mb-2">Priority</label>
+            <div class="flex bg-surface-container-lowest border border-outline-variant rounded-lg p-1">
+                <button type="button" (click)="setPrioridad(PrioridadEnum.Baja)"
+                    [class]="packageForm.get('prioridad')?.value === PrioridadEnum.Baja ? 'bg-surface-container-highest text-on-surface shadow-sm border border-outline-variant/50' : 'text-on-surface-variant hover:text-on-surface'"
+                    class="flex-1 py-1.5 text-xs font-semibold rounded transition-colors">
+                    Low
+                </button>
+                <button type="button" (click)="setPrioridad(PrioridadEnum.Media)"
+                    [class]="packageForm.get('prioridad')?.value === PrioridadEnum.Media ? 'bg-surface-container-highest text-on-surface shadow-sm border border-outline-variant/50' : 'text-on-surface-variant hover:text-on-surface'"
+                    class="flex-1 py-1.5 text-xs font-semibold rounded transition-colors">
+                    Medium
+                </button>
+                <button type="button" (click)="setPrioridad(PrioridadEnum.Alta)"
+                    [class]="packageForm.get('prioridad')?.value === PrioridadEnum.Alta ? 'bg-surface-container-highest text-on-surface shadow-sm border border-outline-variant/50' : 'text-on-surface-variant hover:text-primary'"
+                    class="flex-1 py-1.5 text-xs font-semibold rounded transition-colors">
+                    High
+                </button>
+            </div>
+        </div>
+
+        <button type="submit" [disabled]="packageForm.invalid"
+            class="w-full bg-primary hover:bg-primary-container disabled:opacity-30 disabled:grayscale disabled:cursor-not-allowed text-on-primary font-bold py-2.5 rounded transition-all mt-6 flex items-center justify-center gap-2 cursor-pointer">
+            <svg lucideSave class="w-6 h-6"></svg>
+            Registrar
+        </button>
+    </form>
+</div>

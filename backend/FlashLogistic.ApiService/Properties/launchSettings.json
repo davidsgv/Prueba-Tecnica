@@ -8,7 +8,6 @@
       "applicationUrl": "http://localhost:5471",
       "environmentVariables": {
         "ASPNETCORE_ENVIRONMENT": "Development",
-        "ASPNETCORE_DASHBOARD_UNSECURED": "true"
       }
     },
     "https": {

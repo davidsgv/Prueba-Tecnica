@@ -2,26 +2,15 @@
   "version": "0.2.0",
   "configurations": [
     {
-      "name": ".NET Aspire: Launch AppHost",
-      "type": "dotnet",
-      "request": "launch",
-      "projectPath": "${workspaceFolder}/backend/FlashLogistic.AppHost/FlashLogistic.AppHost.csproj",
-      "presentation": {
-        "hidden": false,
-        "group": "Back",
-        "order": 1
-      }
-    },
-    {
       "name": "ng serve",
       "type": "chrome",
-      "request": "launch",
+      "request": "attach",
       "preLaunchTask": "npm: start",
       "url": "http://localhost:4200/",
       "presentation": {
         "hidden": false,
-        "group": "Front",
-        "order": 2
+        "group": "Run",
+        "order": 1
       }
     },
     {
@@ -32,8 +21,8 @@
       "url": "http://localhost:9876/debug.html",
       "presentation": {
         "hidden": false,
-        "group": "Front",
-        "order": 3
+        "group": "Test",
+        "order": 2
       }
     }
   ]

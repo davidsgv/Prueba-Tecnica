@@ -1,0 +1,13 @@
+{
+  "name": "Angular",
+  "image": "mcr.microsoft.com/devcontainers/typescript-node:20", 
+  "postCreateCommand": "npm install -g @angular/cli",
+  "customizations": {
+    "vscode": {
+      "extensions": [
+        "Angular.ng-template",
+        "bradlc.vscode-tailwindcss"
+      ]
+    }
+  }
+}
