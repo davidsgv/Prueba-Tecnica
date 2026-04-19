@@ -59,13 +59,14 @@ nunit-*.xml
 # See https://docs.github.com/get-started/getting-started-with-git/ignoring-files for more about ignoring files.
 
 # Compiled output
-/web/dist
-/web/tmp
-/web/out-tsc
-/web/bazel-out
+web/dist
+web/tmp
+web/out-tsc
+web/bazel-out
 
 # Node
-/web/node_modules
+web/node_modules/
+**/node_modules/
 npm-debug.log
 yarn-error.log
 
@@ -88,13 +89,13 @@ yarn-error.log
 .history/*
 
 # Miscellaneous
-/web/.angular/cache
+web/.angular/
 .sass-cache/
-/web/connect.lock
-/web/coverage
-/web/libpeerconnection.log
+web/connect.lock
+web/coverage
+web/libpeerconnection.log
 testem.log
-/web/typings
+web/typings
 __screenshots__/
 
 # System files

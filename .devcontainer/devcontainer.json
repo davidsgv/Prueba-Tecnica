@@ -11,7 +11,8 @@
       "extensions": [
         "humao.rest-client",
         "ms-dotnettools.csdevkit",
-        "Angular.ng-template"
+        "Angular.ng-template",
+        "bradlc.vscode-tailwindcss"
       ]
     }
   }
