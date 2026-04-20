@@ -87,10 +87,11 @@ internal class PaqueteService : IPaqueteService
     public async Task AsignarRepartidorAsync(Guid paqueteId, Guid repartidorId)
     {
         var paquete = await FindPaqueteAsync(paqueteId);
-        var repartidor = await _repartidorRepository.GetWithPackageAsync(repartidorId)
+        var repartidor = await _repartidorRepository.GetAsync(repartidorId)
                      ?? throw new KeyNotFoundException("Repartidor no encontrado");
 
-        if (repartidor.Paquetes.Count >= 3)
+        var packageCount = await _repartidorRepository.GetPackageCountAsync(repartidorId, EstadoPaquete.Asignado); 
+        if (packageCount >= 3)
             throw new ArgumentException("El repartidor ya tiene 3 paquetes asignados");
 
         paquete.AsignarRepartidor(repartidor);

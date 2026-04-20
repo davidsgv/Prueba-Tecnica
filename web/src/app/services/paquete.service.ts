@@ -1,9 +1,9 @@
 import { inject, Injectable, signal } from '@angular/core';
 import { HttpClient, HttpParams } from '@angular/common/http';
-import { map, catchError, throwError, tap } from 'rxjs';
+import { map, catchError, throwError, tap, switchMap } from 'rxjs';
 import { Package } from '../core/models/package.models';
 import { PagedResponse } from '../core/DTOs/pagedResponse.dto';
-import { CreatePackageDto, PackageDto } from '../core/DTOs/paquete.dto';
+import { CreatePackageDto, PackageDto, UpdatePaqueteDTO } from '../core/DTOs/paquete.dto';
 import { EstadoPaquete } from '../core/enums/estado-paquete.enum';
 
 @Injectable({ providedIn: 'root' })
@@ -13,27 +13,38 @@ export class PaqueteService {
 
     paquetes = signal<Package[]>([]);
     error = signal<string | null>(null);
+    asignarError = signal<string | null>(null);
+
+    private currentPage = signal<number>(1);
+    private pageSize = signal<number>(10);
+    private currentEstado = signal<EstadoPaquete | undefined>(undefined);
+
+    private _cargarPaquetes() { // Helper que retorna el observable
+        let params = new HttpParams()
+            .set('PageNumber', this.currentPage().toString())
+            .set('PageSize', this.pageSize().toString());
+
+        const estadoFiltrado = this.currentEstado();
+        if (estadoFiltrado !== undefined) {
+            params = params.set('EstadoPaquete', estadoFiltrado);
+        }
+        
+        return this.http.get<PagedResponse<PackageDto>>(this.apiUrl, { params }).pipe(
+            map(response => response.items.map(dto => this.mapDtoToModel(dto))),
+            tap(data => this.paquetes.set(data))
+        );
+    }
 
     // GET: Obtener todos
-    obtenerPaquetes(page: number = 1, size: number = 10, estado?: EstadoPaquete) {
-        let params = new HttpParams()
-            .set('PageNumber', page.toString())
-            .set('PageSize', size.toString());
+    obtenerPaquetes(page?: number, size?: number, estado?: EstadoPaquete) {
+        if (page !== undefined) this.currentPage.set(page);
+        if (size !== undefined) this.pageSize.set(size);
+        this.currentEstado.set(estado);
 
-        if (estado !== undefined) params = params.set('EstadoPaquete', estado);
-
-        this.http.get<PagedResponse<PackageDto>>(this.apiUrl, { params })
-            .pipe(
-                map(response => response.items.map(dto => this.mapDtoToModel(dto))),
-                catchError(err => {
-                    this.error.set("Error al cargar los paquetes del servidor.");
-                    return throwError(() => err);
-                })
-            )
-            .subscribe(data => {
-                this.paquetes.set(data);
-                this.error.set(null);
-            });
+        this._cargarPaquetes().subscribe(data => {
+            this.paquetes.set(data);
+            this.error.set(null);
+        });
     }
 
     // GET BY ID
@@ -52,18 +63,23 @@ export class PaqueteService {
     }
 
     // PUT: Actualizar
-    actualizarPaquete(id: string, paquete: any) {
+    actualizarPaquete(id: string, paquete: UpdatePaqueteDTO) {
         return this.http.put(`${this.apiUrl}/${id}`, paquete).pipe(
-            tap(() => this.obtenerPaquetes()),
+            switchMap(() => this._cargarPaquetes()), 
+            tap(() => this.error.set(null)),
             catchError(err => this.handleError(err))
-        );
+        )
     }
 
     // PUT: Asignar Repartidor (Acción de negocio clave)
     asignarRepartidor(paqueteId: string, repartidorId: string) {
         return this.http.put(`${this.apiUrl}/${paqueteId}/repartidor`, { repartidorId }).pipe(
             tap(() => this.obtenerPaquetes()),
-            catchError(err => this.handleError(err))
+            catchError(err => {
+                const msg = err.error?.detail || "Error en la asignación de paquetes.";
+                this.asignarError.set(msg);
+                return throwError(() => err);
+            })
         );
     }
 

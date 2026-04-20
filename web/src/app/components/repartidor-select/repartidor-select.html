@@ -1,0 +1,19 @@
+<div class="flex items-center gap-2 bg-surface-container-lowest p-2 rounded border border-outline-variant overflow-hidden">
+    <select 
+        (change)="selectedRepartidorId.set($any($event.target).value)"
+        class="flex-1 min-w-0 bg-transparent border-none text-sm text-on-surface focus:ring-0 p-1 cursor-pointer"
+    >
+        <option class="bg-surface-container-lowest" value="" disabled selected>Seleccionar Repartidor...</option>
+        @for (rep of repartidores(); track rep.id) {
+            <option class="bg-surface-container-lowest" [value]="rep.id">{{ rep.nombre }}</option>
+        }
+    </select>
+    
+    <button 
+        (click)="asignar(selectedRepartidorId())"
+        [disabled]="isEmpty(selectedRepartidorId()) || isLoading()"
+        class="bg-surface-container-highest enabled:hover:bg-primary enabled:hover:text-on-primary text-primary font-bold py-1.5 px-3 rounded text-xs transition-colors border border-outline-variant disabled:opacity-50 disabled:cursor-not-allowed"
+    >
+        Asignar
+    </button>
+</div>

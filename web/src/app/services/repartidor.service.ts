@@ -1,11 +1,9 @@
 import { inject, Injectable, signal } from '@angular/core';
 import { HttpClient, HttpParams } from '@angular/common/http';
-import { catchError, throwError, tap } from 'rxjs';
-
-export interface Repartidor {
-    id: string;
-    nombre: string;
-}
+import { catchError, throwError, tap, map } from 'rxjs';
+import { Repartidor } from '../core/models/repartidor.models';
+import { PagedResponse } from '../core/DTOs/pagedResponse.dto';
+import { RepartidorDto } from '../core/DTOs/repartidor.dto';
 
 @Injectable({ providedIn: 'root' })
 export class RepartidorService {
@@ -15,19 +13,20 @@ export class RepartidorService {
     repartidores = signal<Repartidor[]>([]);
     error = signal<string | null>(null);
 
-    obtenerRepartidores(page: number = 1, size: number = 10) {
+    obtenerRepartidores(page: number = 1, size: number = 50) {
         const params = new HttpParams()
             .set('PageNumber', page.toString())
             .set('PageSize', size.toString());
 
-        this.http.get<Repartidor[]>(this.apiUrl, { params })
+        this.http.get<PagedResponse<RepartidorDto>>(this.apiUrl, { params })
             .pipe(
-                catchError(err => {
-                    this.error.set("Error al cargar repartidores.");
-                    return throwError(() => err);
-                })
+                map(response => response.items.map(dto => this.mapDtoToModel(dto))),
+                catchError(err => this.handleError(err))
             )
-            .subscribe(data => this.repartidores.set(data));
+            .subscribe(data => {
+                this.repartidores.set(data);
+                this.error.set(null);
+            });
     }
 
     crearRepartidor(nombre: string) {
@@ -46,5 +45,18 @@ export class RepartidorService {
         return this.http.delete(`${this.apiUrl}/${id}`).pipe(
             tap(() => this.obtenerRepartidores())
         );
+    }
+
+    private mapDtoToModel(dto: RepartidorDto): Repartidor {
+        return {
+            id: dto.id,
+            nombre: dto.nombre,
+        };
+    }
+
+    private handleError(err: any) {
+        const msg = err.error?.message || "Error en la operación de repartidores.";
+        this.error.set(msg);
+        return throwError(() => err);
     }
 }

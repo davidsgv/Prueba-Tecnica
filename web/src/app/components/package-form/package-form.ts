@@ -4,11 +4,11 @@ import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
 import { PaqueteService } from '../../services/paquete.service';
 import { Prioridad } from '../../core/enums/prioridad.enum';
 import { CreatePackageDto } from '../../core/DTOs/paquete.dto';
-import { LucidePackage, LucideSave } from '@lucide/angular';
+import { LucidePackage, LucideSave, LucideCircleAlert } from '@lucide/angular';
 
 @Component({
     selector: 'app-package-form',
-    imports: [CommonModule, ReactiveFormsModule, LucidePackage, LucideSave],
+    imports: [CommonModule, ReactiveFormsModule, LucidePackage, LucideSave, LucideCircleAlert],
     templateUrl: './package-form.html',
 })
 export class PackageFormComponent {

@@ -16,7 +16,7 @@ namespace FlashLogistic.Infrastructure.Migrations
                 INSERT INTO Repartidores (Id, Nombre) VALUES
                 (NEWID(), 'David'),
                 (NEWID(), 'Fabian'),
-                (NEWID(), 'Wendy'),
+                (NEWID(), 'Ana'),
                 (NEWID(), 'Edgar'),
                 (NEWID(), 'Ernesto'),
                 (NEWID(), 'Camilo');
@@ -25,7 +25,7 @@ namespace FlashLogistic.Infrastructure.Migrations
             migrationBuilder.Sql($"""
                 DECLARE @Id UNIQUEIDENTIFIER = (SELECT TOP 1 Id FROM Repartidores WHERE Nombre = 'David');
                 INSERT INTO Paquetes (Id, Descripcion, Peso, Codigo, Estado, Prioridad, RepartidorId) VALUES
-                (NEWID(), 'Paquete de prueba con una descripción larga', 2.5, 'SEED-1', 0, 1, @Id);
+                (NEWID(), 'Paquete de prueba con una descripción larga', 2.5, 'SEED-1', 1, 1, @Id);
             """);
         }
 

@@ -18,3 +18,10 @@ export interface CreatePackageDto {
     codigo: string;
     prioridad: Prioridad;
 }
+
+export interface UpdatePaqueteDTO {
+    descripcion: string;
+    peso: number;
+    estado: EstadoPaquete;
+    prioridad: Prioridad
+}

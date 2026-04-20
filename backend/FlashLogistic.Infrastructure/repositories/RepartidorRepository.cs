@@ -1,4 +1,5 @@
 ﻿using FlashLogistic.Domain.Entities;
+using FlashLogistic.Domain.Enums;
 using FlashLogistic.Domain.Repositories;
 using FlashLogistic.Infrastructure.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
@@ -21,12 +22,12 @@ internal class RepartidorRepository : IRepartidorRepository
             .FirstOrDefaultAsync(p => p.Id == id);
     }
 
-    public async Task<Repartidor?> GetWithPackageAsync(Guid id)
+    public async Task<int> GetPackageCountAsync(Guid repartidorId, EstadoPaquete estado)
     {
-        return await _context.Repartidor
+        return await _context.Paquetes
             .AsNoTracking()
-            .Include(x => x.Paquetes)
-            .FirstOrDefaultAsync(p => p.Id == id);
+            .Where(x => x.Estado == EstadoPaquete.Asignado && x.RepartidorId == repartidorId)
+            .CountAsync();
     }
 
     public async Task<List<Repartidor>> ListAsync(int page = 1, int size = 10)

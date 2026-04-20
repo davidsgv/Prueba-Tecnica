@@ -4,22 +4,23 @@ import { PaqueteService } from '../../services/paquete.service';
 import { RepartidorService } from '../../services/repartidor.service';
 import { EstadoPaquete } from '../../core/enums/estado-paquete.enum';
 import { Prioridad } from '../../core/enums/prioridad.enum';
-import { LucidePackageSearch, LucideListTodo, LucideTruck } from '@lucide/angular';
+import { LucideListTodo, LucideTruck, LucideCircleAlert, LucideCircleX, LucidePackageCheck } from '@lucide/angular';
+import { RepartidorSelectComponent } from '../repartidor-select/repartidor-select';
+import { Package } from '../../core/models/package.models';
 
 @Component({
     selector: 'app-package-list',
-    imports: [CommonModule, LucidePackageSearch, LucideListTodo, LucideTruck],
+    imports: [CommonModule, LucideListTodo, LucideTruck, RepartidorSelectComponent, LucideCircleAlert, LucideCircleX, LucidePackageCheck],
     templateUrl: './package-list.html',
 })
 export class PackageList implements OnInit{
     private paqueteService = inject(PaqueteService);
-    private repartidorService = inject(RepartidorService);
 
     paquetes = this.paqueteService.paquetes;
-    repartidores = this.repartidorService.repartidores;
+    repartidorError = this.paqueteService.asignarError
 
-    public EstadoPaquete = EstadoPaquete;
-    public Prioridad = Prioridad;
+    protected readonly EstadoPaquete = EstadoPaquete;
+    protected readonly Prioridad = Prioridad;
 
     filtroActual = signal<EstadoPaquete | undefined>(undefined);
     
@@ -33,7 +34,6 @@ export class PackageList implements OnInit{
 
     ngOnInit() {
         this.paqueteService.obtenerPaquetes(1, 10, undefined);
-        this.repartidorService.obtenerRepartidores();
     }
 
     setFiltro(valor: EstadoPaquete | undefined) {
@@ -41,10 +41,24 @@ export class PackageList implements OnInit{
         this.filtroActual.set(valor);
     }
 
-    asignar(paqueteId: string, selectElement: HTMLSelectElement) {
-        // const repartidorId = selectElement.value;
-        // if (repartidorId) {
-        // this.onAssign.emit({ paqueteId, repartidorId });
-        // }
+    isAltaPrioridad(prioridad: any): boolean {
+        if (prioridad === Prioridad.Alta) return true;
+        if (prioridad === Prioridad[Prioridad.Alta]) return true;
+        return false;
+    }
+
+    closeError(){
+        this.repartidorError.set(null);
+    }
+
+    markAsDeliered(paquete: Package){
+        this.paqueteService.actualizarPaquete(paquete.id,{
+            descripcion: paquete.descripcion,
+            peso: paquete.peso,
+            prioridad: paquete.prioridad, 
+            estado: EstadoPaquete.Entregado
+        }).subscribe({
+            next: ()=> console.log("paquete actualizado")
+        });
     }
 }
