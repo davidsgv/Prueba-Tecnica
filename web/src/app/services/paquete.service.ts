@@ -5,11 +5,12 @@ import { Package } from '../core/models/package.models';
 import { PagedResponse } from '../core/DTOs/pagedResponse.dto';
 import { CreatePackageDto, PackageDto, UpdatePaqueteDTO } from '../core/DTOs/paquete.dto';
 import { EstadoPaquete } from '../core/enums/estado-paquete.enum';
+import { environment } from '../../environments/environment.development';
 
 @Injectable({ providedIn: 'root' })
 export class PaqueteService {
     private http = inject(HttpClient);
-    private apiUrl = 'https://localhost:7455/api/paquetes';
+    private apiUrl = `${environment.apiUrl}/api/paquetes`;
 
     paquetes = signal<Package[]>([]);
     error = signal<string | null>(null);

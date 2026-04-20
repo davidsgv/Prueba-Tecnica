@@ -4,11 +4,12 @@ import { catchError, throwError, tap, map } from 'rxjs';
 import { Repartidor } from '../core/models/repartidor.models';
 import { PagedResponse } from '../core/DTOs/pagedResponse.dto';
 import { RepartidorDto } from '../core/DTOs/repartidor.dto';
+import { environment } from '../../environments/environment.development';
 
 @Injectable({ providedIn: 'root' })
 export class RepartidorService {
     private http = inject(HttpClient);
-    private apiUrl = 'https://localhost:7455/api/repartidores';
+    private apiUrl = `${environment.apiUrl}/api/repartidores`;
 
     repartidores = signal<Repartidor[]>([]);
     error = signal<string | null>(null);
